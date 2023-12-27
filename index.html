@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Dragon ball</title>
 </head>
+
 <body>
-    <canvas></canvas>
+    <div class="containerCanvas">
+        <div class="containerHealth">
+            <!-- player -->
+            <div id="playerHealthBar" class="healthBar">
+                <div class="backgroundHealth" style="border-right: none;">.</div>
+                <div id="playerHealth"></div>
+            </div>
+            <!-- time -->
+            <div id="Timer"></div>
+            <!-- enemy -->
+            <div class="healthBar">
+                <div class="backgroundHealth" style="border-left: none;">.</div>
+                <div id="enemyHealth"></div>
+            </div>
+        </div>
+        <canvas></canvas>
+    </div>
     <script src="score.js"></script>
 </body>
+
 </html>
