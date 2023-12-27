@@ -5,12 +5,12 @@ const CANVAS_WIDTH = canvas.width = 1024
 const CANVAS_HEIGHT = canvas.height = 576
 
 const gravity = 0.7
-const playerImage = new Image();
-playerImage.src = 'img/Vegito.png';
+//const playerImage = new Image();
+//playerImage.src = 'img/Vegito.png';
 
 
 class Player {
-    constructor({position, offset}) {
+    constructor({ position, offset }) {
         this.position = position
         this.vantoc = {
             x: 0,
@@ -29,14 +29,15 @@ class Player {
         }
         this.lastKey
         this.isAttacking
+        this.health = 100
     }
     draw() {
         c.fillStyle = "red";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
-        c.drawImage(playerImage, 14, 374, 34, 68, 400, 376, 100, 200);
-        c.fillStyle = "black"
+        //c.drawImage(playerImage, 14, 374, 34, 68, 400, 376, 100, 200);
+        c.fillStyle = "white"
         if (this.isAttacking) {
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+            c.fillRect(this.attackBox.position.x, this.attackBox.position.y+50, this.attackBox.width, this.attackBox.height)
         }
     }
     run() {
@@ -92,21 +93,21 @@ const keys = {
         pressed: false
     }
 };
-/*
-function Collision() {
+
+function khoi_hop_va_cham({ khoihop1, khoihop2 }) {
     return (
-        player.attackBox.position.x + player.attackBox.width >= enemy.position.x
-        && player.attackBox.position.x <= enemy.position.x + enemy.width
-        && player.attackBox.position.y + player.attackBox.height >= enemy.position.y
-        && player.attackBox.position.y + player.attackBox.height <= enemy.position.y + enemy.height
-        && player.isAttacking
+        khoihop1.attackBox.position.x + khoihop1.attackBox.width >= khoihop2.position.x
+        && khoihop1.attackBox.position.x <= khoihop2.position.x + khoihop2.width
+        && khoihop1.attackBox.position.y + khoihop1.attackBox.height >= khoihop2.position.y
+        && khoihop1.attackBox.position.y + khoihop1.attackBox.height <= khoihop2.position.y + khoihop2.height
+        && khoihop1.isAttacking
     )
-}*/
+}
 
 let lastKey
 
 function animate() {
-    c.fillStyle = "white";
+    c.fillStyle = "black";
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     player.draw()
@@ -129,14 +130,28 @@ function animate() {
         enemy.vantoc.x = 5
     }
 
-    if (player.attackBox.position.x + player.attackBox.width >= enemy.position.x
-        && player.attackBox.position.x <= enemy.position.x + enemy.width
-        && player.attackBox.position.y + player.attackBox.height >= enemy.position.y
-        && player.attackBox.position.y + player.attackBox.height <= enemy.position.y + enemy.height
+    if (
+        khoi_hop_va_cham({
+            khoihop1: player,
+            khoihop2: enemy,
+        })
         && player.isAttacking) {
         player.isAttacking = false
-        console.log('attack')
+        enemy.health -= 4
+        document.getElementById("enemyHealth").style.width = enemy.health + '%'
     }
+
+    if (
+        khoi_hop_va_cham({
+            khoihop1: enemy,
+            khoihop2: player,
+        })
+        && enemy.isAttacking) {
+        enemy.isAttacking = false
+        player.health -= 4
+        document.getElementById("playerHealth").style.width = player.health + '%'
+    }
+
     window.requestAnimationFrame(animate);
 }
 
@@ -168,6 +183,9 @@ window.addEventListener('keydown', (event) => {
             break
         case '2':
             enemy.vantoc.y = -15
+            break
+        case '1':
+            enemy.attack()
             break
     }
 });
